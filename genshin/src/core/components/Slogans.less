@@ -1,0 +1,113 @@
+@font-face {
+    font-family: "SloganSerif";
+    src: url("/fonts/slogan-serif-sc-bold.woff2") format("woff2");
+    font-weight: 700 900;
+    font-display: swap;
+}
+
+.slogan-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+    transition: opacity .35s ease;
+
+    &.leaving { opacity: 0; }
+}
+
+@gold: #f3d391;
+@goldHi: #fff3d2;
+
+.slogan {
+    position: absolute;
+    left: 0;
+    top: 0;
+    will-change: transform, opacity;
+    pointer-events: none;
+    user-select: none;
+    font-family: "SloganSerif", "Noto Serif SC", "Source Han Serif SC", "Noto Serif CJK SC", "STZhongsong", "SimSun", serif;
+    font-weight: 900;
+    line-height: 1;
+    white-space: nowrap;
+
+    // 原神风格的匾额：半透明深蓝底 + 双金线描边 + 上下菱形饰钉
+    .plaque {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background:
+            radial-gradient(120% 80% at 50% 0%, rgba(255, 236, 190, .16), rgba(255, 236, 190, 0) 60%),
+            linear-gradient(180deg, rgba(22, 30, 66, .7), rgba(30, 42, 86, .55));
+        border: .22em solid rgba(243, 211, 145, .95);
+        border-radius: .5em;
+        box-shadow:
+            inset 0 0 0 .55em rgba(24, 33, 70, 0),
+            inset 0 0 0 .7em rgba(243, 211, 145, .38),
+            0 0 2.4em rgba(255, 214, 140, .45),
+            0 .5em 1.6em rgba(10, 16, 40, .25);
+        backdrop-filter: blur(.35em) saturate(1.1);
+        -webkit-backdrop-filter: blur(.35em) saturate(1.1);
+        animation: slogan-glow 3.6s ease-in-out infinite;
+
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            width: 1.3em;
+            height: 1.3em;
+            background: linear-gradient(135deg, @goldHi, @gold);
+            box-shadow: 0 0 .9em rgba(255, 222, 150, .95);
+            transform: translateX(-50%) rotate(45deg);
+        }
+        &::before { top: -.78em; }
+        &::after { bottom: -.78em; }
+    }
+
+    .txt, .b-shang {
+        color: @goldHi;
+        text-shadow: 0 0 .18em rgba(255, 214, 140, .9), 0 0 .5em rgba(255, 196, 110, .55), 0 .05em .04em rgba(90, 60, 20, .6);
+    }
+}
+
+// 竖排对联（约 30em 高）
+.slogan-left .plaque,
+.slogan-right .plaque {
+    padding: 2.4em 2.1em;
+
+    .txt {
+        writing-mode: vertical-rl;
+        font-size: 6.4em;
+        letter-spacing: .28em;
+        margin-bottom: -.28em; // 抵消末字字距，视觉居中
+    }
+}
+
+// 横批：上 offerbiu（约 10em 高）
+.slogan-banner .plaque {
+    padding: 1.6em 3.4em;
+    gap: 2.2em;
+
+    &::before, &::after { top: 50%; bottom: auto; }
+    &::before { left: -.0em; transform: translate(-50%, -50%) rotate(45deg); }
+    &::after { left: 100%; transform: translate(-50%, -50%) rotate(45deg); }
+
+    .b-shang { font-size: 6em; }
+    .b-brand {
+        font-size: 6em;
+        letter-spacing: .01em;
+        color: #ffffff;
+        text-shadow: 0 0 .12em #8ea6ff, 0 0 .35em rgba(54, 92, 245, .95), 0 0 .8em rgba(54, 92, 245, .6);
+    }
+}
+
+@keyframes slogan-glow {
+    0%, 100% { box-shadow: inset 0 0 0 .55em rgba(24, 33, 70, 0), inset 0 0 0 .7em rgba(243, 211, 145, .38), 0 0 1.6em rgba(255, 214, 140, .32), 0 .5em 1.6em rgba(10, 16, 40, .25); }
+    50% { box-shadow: inset 0 0 0 .55em rgba(24, 33, 70, 0), inset 0 0 0 .7em rgba(243, 211, 145, .5), 0 0 3.2em rgba(255, 214, 140, .62), 0 .5em 1.6em rgba(10, 16, 40, .25); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .slogan .plaque { animation: none; }
+}

@@ -56,6 +56,8 @@ offerbiu-showcase/
 - **跳转时机 / 目标地址**：`genshin/src/core/GameManager.ts` 的 `restart()` → `goToHistory()`；
   穿门后等待时长在 `genshin/src/core/Game.ts` 的 `_jump()`（`.delay(2)`）。
 - **淡入效果**：`history/index.html` 里的 `html.from-gate::after`（时长 1.3s）。
+- **道路两侧漂浮标语（找工作 / 找实习 / 上 offerbiu）**：`genshin/src/core/components/Slogans.ts`（位置、出现时机）和 `Slogans.less`（匾额样式）；字体是 `genshin/public/fonts/slogan-serif-sc-bold.woff2`（思源宋体/Noto Serif CJK 子集，只含这几个字，改文案要重新生成子集，否则新字会用系统宋体显示）。
+- **右上角 18+ 适龄图标**：`genshin/public/Genshin/Tex_0096_18.png`（`src/pages/Menu.less` 的 `.menu-12` 引用；原 12+ 图 `Tex_0096.png` 保留）。
 - **加载页的 offerbiu 字样**：`genshin/src/pages/Preloader.tsx` / `Preloader.less`。
 - **网页标题**：开门页 `genshin/index.html`（offerbiu），历程页 `history/index.html`。
 - **历程内容**：`history/src/data/timeline.ts`；截图放到 `history/public/images/milestones/<日期>.png`，

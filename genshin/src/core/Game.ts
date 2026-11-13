@@ -29,6 +29,7 @@ import { HashFog } from "./components/HashFog";
 import { Column } from "./components/Column";
 import { BigCloud } from "./components/BigCloud";
 import { gradientBackgroundPlugin } from "./components/gradientBackground";
+import { Slogans } from "./components/Slogans";
 
 const { TweenManager } = TWEEN;
 
@@ -124,6 +125,7 @@ class StateGame extends StateHandler<Game> {
 
         this._forwardCamera = viewer.addNode(ForwardCamera)
         this._road = viewer.addNode(Road);
+        viewer.addNode(Slogans); // 道路两侧漂浮标语：找工作 / 找实习 / 上 offerbiu
 
         viewer.addPlugin(gradientBackgroundPlugin);
         viewer.addPlugin(FXAAPlugin)
