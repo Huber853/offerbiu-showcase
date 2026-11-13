@@ -1,3 +1,4 @@
+import { asset } from './asset';
 import { milestones, tagArt, ui, type Milestone } from './data/timeline';
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
@@ -10,7 +11,7 @@ export function posterHTML(m: Milestone, i: number) {
   <article class="poster ${i % 2 ? 'right' : 'left'}" data-i="${i}">
     <div class="poster-light"></div>
     <div class="poster-frame">
-      <header class="poster-head"><span class="brand-mini"><img src="/images/brand/logo.svg" alt="" />OFFERBIU</span><span class="no">No.${String(n).padStart(2, '0')}</span></header>
+      <header class="poster-head"><span class="brand-mini"><img src="${asset('/images/brand/logo.svg')}" alt="" />OFFERBIU</span><span class="no">No.${String(n).padStart(2, '0')}</span></header>
       <div class="poster-date"><b>${esc(d.md)}</b><span>${esc(d.y)}</span><em class="tag ${TAG_CLASS[m.tag] ?? ''}">${esc(m.tag)}</em></div>
       <div class="poster-img" data-src="${esc(m.image ?? '')}" data-art="${esc(tagArt[m.tag] ?? '')}"><div class="shimmer"></div></div>
       <h3>${esc(m.title)}</h3>
@@ -118,12 +119,12 @@ export function loadPosterImages() {
       if (!art) { el.classList.add('empty'); el.innerHTML = `<span class="ph">${esc(ui.placeholderArt)}<code>public${esc(src || '')}</code></span>`; return; }
       const img = new Image(); img.alt = ''; img.decoding = 'async';
       img.onload = () => { el.innerHTML = ''; el.append(img); el.insertAdjacentHTML('beforeend', `<span class="art-badge">${esc(ui.placeholderArt)}</span>${src ? `<code class="art-path">public${esc(src)}</code>` : ''}`); el.classList.add('loaded', 'art'); };
-      img.src = art;
+      img.src = asset(art);
     };
     if (!src) return useArt();
     const img = new Image(); img.alt = ''; img.decoding = 'async';
     img.onload = () => { el.innerHTML = ''; el.append(img); el.classList.add('loaded', 'shot'); };
     img.onerror = useArt;
-    img.src = src;
+    img.src = asset(src);
   });
 }

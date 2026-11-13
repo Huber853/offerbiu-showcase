@@ -1,0 +1,14 @@
+{
+  "name": "offerbiu-showcase",
+  "private": true,
+  "version": "1.0.0",
+  "description": "开门页（原神风格）→ Offerbiu 开发历程，一条龙演示",
+  "scripts": {
+    "setup": "npm --prefix genshin install && npm --prefix history install",
+    "build:history": "npm --prefix history run build:gate",
+    "start": "npm run build:history && npm --prefix genshin start",
+    "build": "npm run build:history && npm --prefix genshin run build:site",
+    "preview": "npm --prefix genshin run preview -- --host",
+    "dev:history": "npm --prefix history run dev"
+  }
+}

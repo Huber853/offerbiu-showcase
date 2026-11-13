@@ -4,9 +4,10 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 5180",
     "build": "tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:gate": "tsc --noEmit && vite build --base=/history/ --outDir ../genshin/public/history --emptyOutDir"
   },
   "devDependencies": {
     "typescript": "^5.6.0",

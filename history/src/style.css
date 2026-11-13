@@ -31,6 +31,7 @@ a { color: inherit; }
 .track i { position: absolute; top: -6px; width: 16px; height: 16px; margin-left: -8px; background: var(--gold); box-shadow: 0 0 0 3px var(--ink); transition: left .1s linear; }
 .nav-links { display: flex; gap: 4px; }
 .nav-links a { text-decoration: none; font-size: 12px; line-height: 12px; padding: 8px 10px; color: var(--mute); }
+.nav-links .nav-gate { margin-left: 6px; box-shadow: inset 1px 0 0 rgba(255,255,255,.14); color: var(--gold); }
 .nav-links a.on, .nav-links a:hover { color: var(--ink); background: var(--gold); }
 
 /* ---------- 首屏 ---------- */
@@ -200,6 +201,7 @@ footer small { font-size: 12px; opacity: .7; }
   .nav-track { display: none; }
   .nav-links { margin-left: auto; }
   .nav-links a { padding: 6px 6px; }
+  .nav-links .nav-gate span { display: none; }
   .logo { font-size: 12px; } .logo img { width: 22px; height: 22px; }
   .hero-shade { background: linear-gradient(180deg, rgba(11,8,32,.85) 0%, rgba(11,8,32,.55) 45%, transparent 62%); }
   .hero-copy { padding: 84px 20px 0; }

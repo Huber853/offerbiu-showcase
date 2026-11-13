@@ -23,7 +23,14 @@
       #loader .bar i{display:block;height:100%;width:0;background:#ffd23f;animation:ld 1.2s steps(8) infinite}
       #loader span{font:24px/1 "FusionPixel",monospace;letter-spacing:2px}
       @keyframes ld{to{width:100%}}
+      /* 从开门页穿门过来：接住白光，再淡入 */
+      html.from-gate::after{content:"";position:fixed;inset:0;z-index:10000;background:#fff;pointer-events:none;animation:gate-in 1.3s cubic-bezier(.4,0,.2,1) .25s forwards}
+      @keyframes gate-in{to{opacity:0;visibility:hidden}}
+      @media (prefers-reduced-motion: reduce){html.from-gate::after{animation-duration:.3s}}
     </style>
+    <script>
+      try { var g = sessionStorage.getItem('offerbiu-gate'); if (g && Date.now() - Number(g) < 15000) document.documentElement.classList.add('from-gate'); sessionStorage.removeItem('offerbiu-gate'); } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="loader" role="status"><span>OFFERBIU</span><div class="bar"><i></i></div><small style="color:#8e86c9;font:12px/1 FusionPixel,monospace">正在开门…</small></div>

@@ -1,6 +1,7 @@
 import './style.css';
 import { site, game, milestones, closing, ui } from './data/timeline';
 import { initHero } from './hero';
+import { asset, underGate } from './asset';
 import { initGame, drawMascot } from './game';
 import { corridorHTML, initCorridor, loadPosterImages } from './corridor';
 
@@ -11,9 +12,9 @@ const first = milestones[milestones.length - 1].date, last = milestones[0].date;
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <nav class="nav" id="nav">
-    <a class="logo" href="#hero"><img src="/images/brand/logo.svg" alt="" /><span>OFFERBIU</span></a>
+    <a class="logo" href="#hero"><img src="${asset('/images/brand/logo.svg')}" alt="" /><span>OFFERBIU</span></a>
     <div class="nav-track" aria-hidden="true"><small>${esc(first)}</small><div class="track"><i id="nav-mark"></i></div><small>${esc(last)}</small></div>
-    <div class="nav-links">${ui.nav.map((n) => `<a href="#${n.id}" data-id="${n.id}">${esc(n.label)}</a>`).join('')}</div>
+    <div class="nav-links">${ui.nav.map((n) => `<a href="#${n.id}" data-id="${n.id}">${esc(n.label)}</a>`).join('')}${underGate ? `<a class="nav-gate" href="/" title="回到开门页，重新走一遍">↺<span> 重新开门</span></a>` : ''}</div>
   </nav>
 
   <section class="hero" id="hero">
@@ -64,13 +65,13 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
       <div class="mascot reveal"><div class="bubble">${esc(ui.mascotSay)}</div><canvas class="pixel" id="mascot"></canvas></div>
     </div>
     <div class="street"></div>
-    <footer><span class="logo"><img src="/images/brand/logo.svg" alt="" /><span>OFFERBIU</span></span><p>${esc(closing.footer)}</p><small>${esc(ui.credits)}</small></footer>
+    <footer><span class="logo"><img src="${asset('/images/brand/logo.svg')}" alt="" /><span>OFFERBIU</span></span><p>${esc(closing.footer)}</p><small>${esc(ui.credits)}</small></footer>
   </section>
 `;
 
 // 头像
 document.querySelectorAll<HTMLElement>('.avatar[data-src]').forEach((el) => {
-  const img = new Image(); img.onload = () => { el.innerHTML = ''; el.append(img); el.classList.add('loaded'); }; img.src = el.dataset.src!;
+  const img = new Image(); img.onload = () => { el.innerHTML = ''; el.append(img); el.classList.add('loaded'); }; img.src = asset(el.dataset.src!);
 });
 loadPosterImages();
 initHero(document.querySelector('.hero-canvas')!, reduced);
@@ -84,7 +85,7 @@ drawMascot(document.getElementById('mascot') as HTMLCanvasElement);
 
 // 导航：滚动进度 + 当前区块
 const nav = document.getElementById('nav')!, mark = document.getElementById('nav-mark')!;
-const links = Array.from(nav.querySelectorAll<HTMLAnchorElement>('.nav-links a'));
+const links = Array.from(nav.querySelectorAll<HTMLAnchorElement>('.nav-links a[data-id]'));
 const onScroll = () => {
   const h = document.documentElement.scrollHeight - innerHeight;
   mark.style.left = `${(scrollY / Math.max(1, h)) * 100}%`;

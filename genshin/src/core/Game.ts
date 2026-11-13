@@ -15,7 +15,7 @@ import {
 } from "../libs/xviewer";
 
 import { User } from "./User";
-import { gameManager } from "./GameManager";
+import { gameManager, prefetchHistory } from "./GameManager";
 import { StateHandler } from "./states/StateHandler";
 import { StateMachine } from "./states/StateMachine";
 import { AmbientLightComponent } from "./components/AmbientLightComponent";
@@ -168,11 +168,12 @@ class StateGame extends StateHandler<Game> {
         this._road.emit("start");
         gameManager.on("showDoor", (v) => {
             this._forwardCamera.emit("showDoor", v);
-            gameManager.on("doorCreate", () => this.target.viewer.on(DeviceInput.POINTER_DOWN, this._jump, this, true), this, true);
+            gameManager.on("doorCreate", () => { prefetchHistory(); this.target.viewer.on(DeviceInput.POINTER_DOWN, this._jump, this, true); }, this, true);
         }, this, true);
     }
 
     private _jump() {
+        prefetchHistory();
         gameManager.emit("openDoor");
         this._forwardCamera.emit("openDoor");
         this._BloomTransition.playTransition();
