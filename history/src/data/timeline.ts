@@ -79,15 +79,15 @@ export const milestones: Milestone[] = [
   {
     date: '2026-11-12',
     title: '交给 offerbiu 助手全权负责',
-    desc: '私人岗位工作流与简历工作室更新（53 个文件，+3117/−1112 行）并合并 master；同晚把项目交给专门的 offerbiu 助手。',
+    desc: '私人岗位工作流与简历工作室更新（53 个文件，+3117/−1112 行）；同晚把项目交给专门的 offerbiu 助手。',
     tag: '功能',
-    source: 'git 676aff9 / 0c1c083；offerbiu 助手对话 2026-11-12 21:14',
+    source: '版本记录；offerbiu 助手对话 2026-11-12 21:14',
     image: '/images/milestones/2026-11-12.png',
   },
   {
     date: '2026-11-09',
-    title: '下一阶段计划：M0–M6',
-    desc: '规划私人岗位、招聘轮次与提醒、岗位订阅、简历导入导出；M0 基线 97/97 测试，M1 私人岗位 116/116 测试通过。',
+    title: '下一阶段功能规划',
+    desc: '规划私人岗位、招聘轮次与提醒、岗位订阅、简历导入导出；基线测试 97/97 通过，私人岗位相关测试 116/116 通过。',
     tag: '文档',
     source: 'docs/下一阶段功能开发计划.md、docs/下一阶段开发验收记录.md',
     image: '/images/milestones/2026-11-09.png',
@@ -102,18 +102,18 @@ export const milestones: Milestone[] = [
   },
   {
     date: '2026-11-07',
-    title: 'PR #2：收紧岗位证据与密钥边界',
+    title: '收紧岗位证据与密钥边界',
     desc: '公开页面不再等同于岗位在招；不再宣称跨设备同步；服务器 AI 密钥限本机；新增需确认的账号删除。',
     tag: '安全',
-    source: 'git 6236ae0 / 6ac85cf / b3fc2e1（Cursor Agent 提交，Evan Lin 合并）',
+    source: '版本记录（Cursor Agent 提交，Evan Lin 合并）',
     image: '/images/milestones/2026-11-07.png',
   },
   {
     date: '2026-10-23',
     title: 'AI 求职工作流 + 中文简历模板',
-    desc: '加入经历确认、带依据的岗位评估、材料起草与投递留档，引入 MIT 开源简历模板，附 97 项自动化测试；PR #1 合并。',
+    desc: '加入经历确认、带依据的岗位评估、材料起草与投递留档，引入 MIT 开源简历模板，附 97 项自动化测试。',
     tag: '功能',
-    source: 'git 8fd6d9c / 658f9d1 / adb7334；docs/AI求职工作流融合开发文档.md',
+    source: 'docs/AI求职工作流融合开发文档.md',
     image: '/images/milestones/2026-10-23.png',
   },
   {
@@ -121,15 +121,15 @@ export const milestones: Milestone[] = [
     title: 'AI 设置安全加固',
     desc: '保护 AI 配置，以及简历和投递流程。',
     tag: '安全',
-    source: 'git d80ba02',
+    source: '版本记录',
     image: '/images/milestones/2026-10-18.png',
   },
   {
     date: '2026-09-27',
-    title: 'P0 / P1 修复与设计统一',
-    desc: '两天四次提交：SSRF 与登录防护、简历保存冲突、首页与工作台共用设计 token、游客草稿本地保存。',
+    title: '安全修复与设计统一',
+    desc: '两天内完成：SSRF 与登录防护、简历保存冲突、首页与工作台共用设计 token、游客草稿本地保存。',
     tag: '安全',
-    source: 'git f089df0 / 583a21d / 34d0b74 / 166d40c（2026-09-27 至 09-28）',
+    source: '版本记录（2026-09-27 至 09-28）',
     image: '/images/milestones/2026-09-27.png',
   },
   {
@@ -137,7 +137,7 @@ export const milestones: Milestone[] = [
     title: '多 AI 服务商 + 岗位库扩到 16378 条',
     desc: '支持 DeepSeek 与自定义 OpenAI 兼容接口，新增岗位匹配分析；岗位库扩至 16378 条、214 家企业、32 个行业。',
     tag: '功能',
-    source: 'git bc1d8bf',
+    source: '版本记录',
     image: '/images/milestones/2026-09-25.png',
   },
   {
@@ -145,7 +145,7 @@ export const milestones: Milestone[] = [
     title: 'first 上传：代码进 GitHub',
     desc: '第一次提交到 Huber853/Offerbiu，同天重写 README；次日修复人物头顶气泡遮挡。',
     tag: '提交',
-    source: 'git 227c143 / 00bdcbb / d10a474',
+    source: '版本记录',
     image: '/images/milestones/2026-09-20.png',
   },
   {
@@ -177,14 +177,14 @@ export const milestones: Milestone[] = [
 export const closing = {
   title: '现在 · 下一步',
   now: [
-    '当前分支 codex/ai-job-workflow，与远端同步',
-    'M1 私人岗位：实现完成，代码审查中',
-    'M2 招聘轮次与提醒、M3 岗位订阅、M4 简历导入：待开发',
+    '当前进度已与远端保持同步',
+    '私人岗位功能：实现完成，正在代码审查',
+    '招聘轮次与提醒、岗位订阅、简历导入：待开发',
   ],
   team: [
     // 出自 git 提交记录；真实姓名、角色、头像待补充
     { name: 'Huber853', role: '待补充', avatar: '/images/team/huber853.png' },
-    { name: 'Evan Lin', role: '待补充（合并 PR #1、#2）', avatar: '/images/team/evan-lin.png' },
+    { name: 'Evan Lin', role: '待补充（合并了前期两次重要更新）', avatar: '/images/team/evan-lin.png' },
   ],
   contact: [
     { label: 'GitHub', value: 'Huber853/Offerbiu' },
