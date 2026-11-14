@@ -187,8 +187,6 @@ a { color: inherit; }
 .avatar { width: 96px; height: 96px; background: #12102a; display: flex; align-items: center; justify-content: center; margin-bottom: 6px; overflow: hidden; box-shadow: 0 0 0 3px var(--ink), 0 0 0 6px var(--gold); }
 .avatar canvas { width: 100%; height: 100%; image-rendering: pixelated; image-rendering: crisp-edges; }
 .member b { font-family: var(--px); font-size: 12px; line-height: 16px; font-weight: normal; }
-.member small { font-size: 12px; opacity: .7; }
-.member.pending b, .member.pending small { opacity: .62; }
 .mascot { position: relative; display: flex; justify-content: flex-end; align-items: flex-end; gap: 16px; margin: 40px 20px -4px auto; width: max-content; z-index: 2; }
 .mascot canvas { width: 96px; height: 120px; }
 .bubble { font-family: var(--px); font-size: 12px; line-height: 18px; background: #fff; color: var(--ink); padding: 10px 12px; margin-bottom: 70px; box-shadow: 0 0 0 3px var(--ink), 5px 5px 0 3px rgba(0,0,0,.4); }

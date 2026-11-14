@@ -60,7 +60,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
       <div class="board">
         <div class="note reveal" style="--r:-1.5deg"><i class="pin"></i><h4>现在</h4><ul>${closing.now.map((n) => `<li>${esc(n)}</li>`).join('')}</ul></div>
         <div class="note note-team reveal" style="--r:0.4deg"><i class="pin"></i><h4>团队 · 7 人</h4><div class="team">${closing.team.map((t) => `
-          <div class="member${t.name === '待补充' ? ' pending' : ''}"><div class="avatar"><canvas class="pixel" width="48" height="48" data-crew="${t.crew}" aria-hidden="true"></canvas></div><b>${esc(t.name)}</b><small>${esc(t.role)}</small></div>`).join('')}</div></div>
+          <div class="member"><div class="avatar"><canvas class="pixel" width="48" height="48" data-crew="${t.crew}" aria-hidden="true"></canvas></div><b>${esc(t.name)}</b></div>`).join('')}</div></div>
         <div class="note reveal" style="--r:-0.5deg"><i class="pin"></i><h4>联系</h4><ul class="contact">${closing.contact.map((c) => `<li><span>${esc(c.label)}</span>${esc(c.value)}</li>`).join('')}</ul></div>
       </div>
       <div class="mascot reveal"><div class="bubble">${esc(ui.mascotSay)}</div><canvas class="pixel" id="mascot"></canvas></div>

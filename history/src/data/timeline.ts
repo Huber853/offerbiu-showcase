@@ -1,12 +1,12 @@
 // =====================================================================
 //  Offerbiu 开发历程 · 全部文案和时间线数据都在这个文件里
-//  - 所有标注「待补充」的地方需要你手动填写
+//  - 还缺的信息请自行补进对应字段，不要编造
 //  - 图片放到 public/images/... 对应路径，文件不存在时页面会显示占位框
 //  - source 字段记录信息出处，方便核对，不会显示为正文
 // =====================================================================
 
 export interface Milestone {
-  date: string;          // 例如 "2026-09-20"；不确定写 "待补充"
+  date: string;          // 例如 "2026-09-20"
   title: string;
   desc: string;          // 1–2 句
   tag: string;           // 海报角标：起点 / 提交 / 文档 / 功能 / 安全 / 设计
@@ -167,7 +167,7 @@ export const milestones: Milestone[] = [
   {
     date: '2026-09-05',
     title: '起点：项目开始',
-    desc: '受 offerbiu.com 启发，开始动手做自己的秋招工作台；这是能找到的最早记录。这一天具体做了什么：待补充。',
+    desc: '受 offerbiu.com 启发，开始动手做自己的秋招工作台；这是能找到的最早记录。',
     tag: '起点',
     source: 'C:\\Users\\Lenovo\\Documents\\Codex\\2026-09-05\\https-www-offerbiu-com-https-www（目录名）',
     image: '/images/milestones/2026-09-05.png',
@@ -182,19 +182,18 @@ export const closing = {
     '招聘轮次与提醒、岗位订阅、简历导入：待开发',
   ],
   team: [
-    // 七人团队姓名已齐。各自身份仍待补充，不编造。
+    // 七人团队姓名已齐。身份未提供，只展示姓名与头像。
     // crew 对应海面小船上从舵手到船头的男性像素形象，头像与船上人物为同一套绘制。
-    { name: '刘胤政', role: '待补充', crew: 0 },
-    { name: '刘思恺', role: '待补充', crew: 1 },
-    { name: '张俊杰', role: '待补充', crew: 2 },
-    { name: '王子贤', role: '待补充', crew: 3 },
-    { name: '李铁', role: '待补充', crew: 4 },
-    { name: '孙玮亨', role: '待补充', crew: 5 },
-    { name: '董瀚宇', role: '待补充', crew: 6 },
+    { name: '刘胤政', crew: 0 },
+    { name: '刘思恺', crew: 1 },
+    { name: '张俊杰', crew: 2 },
+    { name: '王子贤', crew: 3 },
+    { name: '李铁', crew: 4 },
+    { name: '孙玮亨', crew: 5 },
+    { name: '董瀚宇', crew: 6 },
   ],
   contact: [
     { label: 'GitHub', value: 'Huber853/Offerbiu' },
-    { label: '联系方式', value: '待补充' },
   ],
   footer: 'Offerbiu · 开发历程演示（雏形）',
 };
