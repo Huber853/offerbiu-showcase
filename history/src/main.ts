@@ -1,6 +1,7 @@
 import './style.css';
 import { site, game, milestones, closing, ui } from './data/timeline';
 import { initHero } from './hero';
+import { paintTeamAvatars } from './crew';
 import { asset, underGate } from './asset';
 import { initGame, drawMascot } from './game';
 import { corridorHTML, initCorridor, loadPosterImages } from './corridor';
@@ -58,8 +59,8 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
       <h2 class="reveal">${esc(closing.title)}</h2>
       <div class="board">
         <div class="note reveal" style="--r:-1.5deg"><i class="pin"></i><h4>现在</h4><ul>${closing.now.map((n) => `<li>${esc(n)}</li>`).join('')}</ul></div>
-        <div class="note reveal" style="--r:1deg"><i class="pin"></i><h4>团队</h4><div class="team">${closing.team.map((t) => `
-          <div class="member"><div class="avatar" data-src="${esc(t.avatar)}"><span>头像<br>待补充</span></div><b>${esc(t.name)}</b><small>${esc(t.role)}</small></div>`).join('')}</div></div>
+        <div class="note note-team reveal" style="--r:0.4deg"><i class="pin"></i><h4>团队 · 7 人</h4><div class="team">${closing.team.map((t) => `
+          <div class="member${t.name === '待补充' ? ' pending' : ''}"><div class="avatar"><canvas class="pixel" width="48" height="48" data-crew="${t.crew}" aria-hidden="true"></canvas></div><b>${esc(t.name)}</b><small>${esc(t.role)}</small></div>`).join('')}</div></div>
         <div class="note reveal" style="--r:-0.5deg"><i class="pin"></i><h4>联系</h4><ul class="contact">${closing.contact.map((c) => `<li><span>${esc(c.label)}</span>${esc(c.value)}</li>`).join('')}</ul></div>
       </div>
       <div class="mascot reveal"><div class="bubble">${esc(ui.mascotSay)}</div><canvas class="pixel" id="mascot"></canvas></div>
@@ -69,10 +70,8 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   </section>
 `;
 
-// 头像
-document.querySelectorAll<HTMLElement>('.avatar[data-src]').forEach((el) => {
-  const img = new Image(); img.onload = () => { el.innerHTML = ''; el.append(img); el.classList.add('loaded'); }; img.src = asset(el.dataset.src!);
-});
+// 团队头像：与海面小船上的男性像素形象为同一套，现场绘制，不再请求缺失的头像文件
+paintTeamAvatars(document);
 loadPosterImages();
 initHero(document.querySelector('.hero-canvas')!, reduced);
 initGame({

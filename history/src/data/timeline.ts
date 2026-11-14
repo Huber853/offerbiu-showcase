@@ -182,9 +182,15 @@ export const closing = {
     '招聘轮次与提醒、岗位订阅、简历导入：待开发',
   ],
   team: [
-    // 出自 git 提交记录；真实姓名、角色、头像待补充
-    { name: 'Huber853', role: '待补充', avatar: '/images/team/huber853.png' },
-    { name: 'Evan Lin', role: '待补充（合并了前期两次重要更新）', avatar: '/images/team/evan-lin.png' },
+    // 七人团队。已提供六位姓名；第七位与各自身份均待补充，不编造。
+    // crew 对应海面小船上从舵手到船头的男性像素形象，头像与船上人物为同一套绘制。
+    { name: '刘胤政', role: '待补充', crew: 0 },
+    { name: '刘思恺', role: '待补充', crew: 1 },
+    { name: '张俊杰', role: '待补充', crew: 2 },
+    { name: '王子贤', role: '待补充', crew: 3 },
+    { name: '李铁', role: '待补充', crew: 4 },
+    { name: '孙玮亨', role: '待补充', crew: 5 },
+    { name: '待补充', role: '待补充', crew: 6 },
   ],
   contact: [
     { label: 'GitHub', value: 'Huber853/Offerbiu' },

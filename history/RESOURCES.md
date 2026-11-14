@@ -69,7 +69,7 @@
 
 ### 3. 团队与联系
 
-- [ ] 团队成员真实姓名和角色（目前只有 Git 记录里的 `Huber853`、`Evan Lin`）→ `closing.team`
+- [x] 团队六位姓名已写入（刘胤政、刘思恺、张俊杰、王子贤、李铁、孙玮亨）；第七人与各自身份仍待补充。头像使用与海面小船同一套男性像素形象。→ `closing.team`
 - [ ] 成员头像（正方形，建议 256×256）→ `public/images/team/huber853.png`、`public/images/team/evan-lin.png`
 - [ ] 联系方式（邮箱 / 公众号 / 群）→ `closing.contact`
 

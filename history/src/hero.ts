@@ -1,7 +1,10 @@
 import { C, pixelText, pixelTextWidth } from './pixel';
+import { CREW, drawPerson } from './crew';
+import { milestones } from './data/timeline';
+import { createVoyage, type VoyageView } from './voyage';
 
-// 首屏：夜色海面，涌浪真实起伏（多层 Gerstner 波），挂着 OFFERBIU 帆的小船随浪升降、俯仰，船上 7 个人。
-// 全部代码逐像素绘制；旋转用三次错切（整数像素位移），保持像素锐利。
+// 首屏：夜色海面，涌浪真实起伏（多层 Gerstner 波）。小船向前航行，随浪升降俯仰，船上 7 位男性船员。
+// 开发历程按时间顺序在海面背景中浮现、靠近、再离去。全部逐像素绘制，旋转保持像素锐利。
 const rng = (seed: number) => () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
 const hash = (a: number, b: number) => { let h = (a * 374761393 + b * 668265263) | 0; h = (h ^ (h >>> 13)) * 1274126177; return ((h ^ (h >>> 16)) >>> 0) / 4294967295; };
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
@@ -27,72 +30,10 @@ function gerstner(ws: Wave[], x: number, t: number, out: WaterSample) {
   return out;
 }
 
-// ---------------- 船员 ----------------
-interface Crew { hair: string; style: 'short' | 'cap' | 'bun' | 'long' | 'curly' | 'phones' | 'spiky'; skin: string; shirt: string; shade: string; pose: 'steer' | 'wave' | 'idle' | 'cheer' | 'laptop' | 'nod' | 'point'; x: number }
-const CREW: Crew[] = [
-  { hair: '#1d1a3a', style: 'cap', skin: '#f2c79b', shirt: '#1d2b6b', shade: '#141f52', pose: 'steer', x: 4 },
-  { hair: '#ff8fc1', style: 'long', skin: '#f6d2b0', shirt: C.coral, shade: '#d9584a', pose: 'wave', x: 16 },
-  { hair: '#2b2440', style: 'bun', skin: '#e8b88a', shirt: C.white, shade: '#c9cbe8', pose: 'idle', x: 27 },
-  { hair: '#ffd23f', style: 'spiky', skin: '#f2c79b', shirt: C.gold, shade: C.goldDk, pose: 'cheer', x: 38 },
-  { hair: '#6b3f26', style: 'curly', skin: '#c98d62', shirt: '#4fbf8f', shade: '#33916a', pose: 'laptop', x: 52 },
-  { hair: '#2b2440', style: 'phones', skin: '#f6d2b0', shirt: '#9b6cff', shade: '#7448d6', pose: 'nod', x: 62 },
-  { hair: '#14112a', style: 'short', skin: '#e8b88a', shirt: '#6fd3ff', shade: '#3fa3d6', pose: 'point', x: 72 },
-];
+// 船员绘制见 crew.ts（与结尾团队头像共用）
 
 // 船画布：宽 96，高 78；甲板第 54 行，静水吃水线第 64 行；桅杆 x=47..49
 const BW = 96, BH = 78, DECK = 54, WL = 64, MAST = 48;
-
-function drawPerson(g: CanvasRenderingContext2D, p: Crew, i: number, t: number, jolt: number, still: boolean) {
-  const ph = t + i * 37;
-  const beat = still ? 0 : Math.floor(ph / 12) % 2;
-  const idleBob = still ? 0 : (Math.sin(ph / 23 + i) > 0.55 ? -1 : 0);
-  const nod = p.pose === 'nod' && !still ? Math.floor(ph / 9) % 2 : 0;
-  const y = DECK - 13 + idleBob + jolt;
-  const x = p.x;
-  const px = (cx: number, cy: number, c: string, w = 1, h = 1) => { g.fillStyle = c; g.fillRect(x + cx, y + cy, w, h); };
-  const ink = C.ink;
-  const hy = nod; // 头部偏移（点头）
-  // 头（5×5）+ 描边
-  const hp = (cx: number, cy: number, c: string, w = 1, h = 1) => px(cx, cy + hy, c, w, h);
-  hp(0, 1, ink, 7, 6); hp(1, 0, ink, 5, 1);
-  hp(1, 1, p.skin, 5, 5);
-  const blink = !still && (ph % 211) < 6;
-  if (blink) hp(4, 3, ink, 2, 1); else { hp(4, 3, ink); hp(5, 3, ink); hp(4, 2, 'rgba(20,17,42,.0)'); }
-  hp(5, 5, '#e98a7a');
-  if (p.pose === 'cheer' || p.pose === 'wave') hp(4, 5, '#c0505a', 2, 1); // 张嘴笑
-  // 发型
-  if (p.style === 'cap') { hp(0, -1, ink, 7, 1); hp(1, 0, '#1d2b6b', 5, 2); hp(6, 1, '#1d2b6b', 2, 1); hp(2, 0, C.gold, 1, 1); }
-  else if (p.style === 'long') { const sway = still ? 0 : Math.floor(ph / 15) % 2; hp(1, 0, p.hair, 5, 2); hp(1, 2, p.hair, 1, 5); hp(0 - sway, 2, p.hair, 1, 6); }
-  else if (p.style === 'bun') { hp(1, 0, p.hair, 5, 2); hp(2, -2, ink, 3, 2); hp(2, -2, p.hair, 2, 2); hp(1, 2, p.hair, 1, 2); }
-  else if (p.style === 'spiky') { hp(1, 0, p.hair, 5, 2); hp(1, -1, p.hair); hp(3, -2, p.hair); hp(5, -1, p.hair); hp(1, 2, p.hair); }
-  else if (p.style === 'curly') { hp(0, 0, p.hair, 7, 2); hp(0, 2, p.hair, 2, 2); hp(-1, 1, p.hair, 1, 2); }
-  else if (p.style === 'phones') { hp(1, 0, p.hair, 5, 2); hp(1, 2, p.hair); hp(0, -1, '#14112a', 7, 1); hp(-1, 2, '#ff7b6b', 2, 3); hp(6, 2, '#ff7b6b', 2, 3); }
-  else { hp(1, 0, p.hair, 5, 2); hp(1, 2, p.hair, 2, 1); }
-  // 身体（7×7）
-  px(0, 7, ink, 7, 7); px(1, 7, p.shirt, 5, 7); px(1, 7, p.shade, 1, 7);
-  const arm = (cx: number, cy: number, w: number, h: number) => { px(cx, cy, ink, w + 2, h + 2); px(cx + 1, cy + 1, p.skin, w, h); };
-  switch (p.pose) {
-    case 'steer': {
-      arm(5, 8, 2, 1);
-      // 舵轮（辐条随时间转动）
-      g.fillStyle = ink; g.fillRect(x + 8, y + 6, 5, 5);
-      g.fillStyle = '#b07a4a'; g.fillRect(x + 9, y + 7, 3, 3);
-      g.fillStyle = '#6a3f22'; if (beat) { g.fillRect(x + 10, y + 6, 1, 5); g.fillRect(x + 8, y + 8, 5, 1); } else { g.fillRect(x + 9, y + 7, 1, 1); g.fillRect(x + 11, y + 9, 1, 1); g.fillRect(x + 11, y + 7, 1, 1); g.fillRect(x + 9, y + 9, 1, 1); }
-      g.fillStyle = C.gold; g.fillRect(x + 10, y + 8, 1, 1);
-      g.fillStyle = ink; g.fillRect(x + 10, y + 11, 1, 3);
-      break;
-    }
-    case 'wave': beat ? arm(5, 0, 1, 6) : arm(6, 2, 2, 4); break;
-    case 'cheer': if (beat) { arm(-2, 0, 1, 7); arm(6, 0, 1, 7); } else { arm(-2, 3, 1, 5); arm(6, 3, 1, 5); } break;
-    case 'laptop': {
-      px(4, 9, ink, 6, 5); px(5, 10, (Math.floor(ph / 20) % 3) ? '#cfd6ff' : '#fff2a8', 4, 2); px(5, 12, '#9aa6d6', 4, 1);
-      px(6, 10, C.brand, 1, 1); break;
-    }
-    case 'point': { const f = beat ? 1 : 0; arm(5, 7 - f, 4, 1); px(11, 8 - f, p.skin); px(11, 7 - f, ink); break; }
-    case 'nod': px(-1, 9, ink, 1, 2); break;
-    default: if (!still && Math.floor(ph / 40) % 3 === 0) arm(-2, 8, 1, 3); break;
-  }
-}
 
 function drawBoat(g: CanvasRenderingContext2D, t: number, jolt: number, wind: number, still: boolean) {
   g.clearRect(0, 0, BW, BH);
@@ -157,7 +98,7 @@ function drawBoat(g: CanvasRenderingContext2D, t: number, jolt: number, wind: nu
   line(sl - 2, bot + 3, 8, DECK - 1, rope);
   line(sr + 3, bot + 3, 80, DECK - 1, rope);
   // 7 位船员（站在船舷后）
-  CREW.forEach((p, i) => drawPerson(g, p, i, t, jolt, still));
+  CREW.forEach((p, i) => drawPerson(g, p, i, t, jolt, still, p.x, DECK - 13));
   // 船体
   const rows = 14;
   for (let r = 0; r < rows; r++) {
@@ -187,13 +128,14 @@ export function initHero(canvas: HTMLCanvasElement, reduced: boolean) {
   const mk = (w: number, h: number, read = false) => { const c = document.createElement('canvas'); c.width = w; c.height = h; const x = c.getContext('2d', { willReadFrequently: read })!; x.imageSmoothingEnabled = false; return [c, x] as const; };
   const [boatC, bctx] = mk(BW, BH, true);
   const PAD = 28, RW = BW + PAD * 2, RH = BH + PAD * 2;
-    let S = 4, LW = 360, LH = 225;
+  let S = 4, LW = 360, LH = 225;
   const r = rng(23);
   const stars = Array.from({ length: 110 }, () => [r(), r() * 0.5, r() * 6, r() > 0.88 ? 2 : 1]);
   const clouds = Array.from({ length: 7 }, (_, i) => ({ x: r() * 700, y: 0.08 + r() * 0.3, w: 24 + Math.floor(r() * 40), v: 0.02 + r() * 0.05, layer: i % 2 }));
   const gulls = Array.from({ length: 4 }, () => ({ x: r() * 400, y: 0.18 + r() * 0.2, v: 0.12 + r() * 0.12, ph: r() * 10 }));
   const spray: Spray[] = [];
   const wake: Wake[] = [];
+  const voyage = createVoyage(milestones, reduced);
 
   // 波浪参数（按屏幕尺寸）
   let main: Wave[] = [], fore: Wave[] = [], mids: { f: number; w: Wave[]; fill: string; rim: string; cap: string; shade: string }[] = [];
@@ -236,7 +178,14 @@ export function initHero(canvas: HTMLCanvasElement, reduced: boolean) {
 
   const mobile = () => LW < 200;
   const horizon = () => Math.floor(LH * (mobile() ? 0.6 : 0.5));
-  const boatBaseX = () => (mobile() ? Math.floor(LW / 2) + 2 : Math.floor(LW * 0.71));
+  const cruiseX = () => (mobile() ? Math.floor(LW / 2) + 2 : Math.floor(LW * 0.71));
+  const startX = () => (mobile() ? Math.floor(LW * 0.38) : Math.floor(LW * 0.55));
+  const sailingX = (t: number) => {
+    if (reduced) return cruiseX();
+    const k = clamp((t - T0) / 210, 0, 1);
+    const ease = 1 - (1 - k) * (1 - k) * (1 - k);
+    return startX() + (cruiseX() - startX()) * ease;
+  };
   const base = () => Math.floor(LH * (mobile() ? 0.865 : 0.8));
   const env = (t: number) => (reduced ? 1 : 0.86 + 0.14 * Math.sin(t * 0.0037) + 0.06 * Math.sin(t * 0.011));
 
@@ -246,7 +195,7 @@ export function initHero(canvas: HTMLCanvasElement, reduced: boolean) {
   const mainAt = (x: number, t: number) => {
     const e = env(t);
     main[0].A *= e; main[1].A *= e;
-    gerstner(main, x, t, smp);
+    gerstner(main, x + voyage.offset, t, smp);
     main[0].A /= e; main[1].A /= e;
     return base() - smp.h;
   };
@@ -269,8 +218,9 @@ export function initHero(canvas: HTMLCanvasElement, reduced: boolean) {
     return { y: my, slope: sxy / sxx };
   };
   const settle = (t: number) => {
+    voyage.settle();
     fillMain(t);
-    boat.x = boatBaseX(); boat.surge = 0;
+    boat.x = sailingX(t); boat.surge = 0;
     const h = hullTarget(boat.x);
     boat.y = h.y; boat.a = clamp(Math.atan(h.slope) * 0.8, -0.21, 0.21); if (reduced && Math.abs(boat.a) < 0.08) boat.a = 0; boat.vy = 0; boat.va = 0; boat.init = true;
   };
@@ -279,7 +229,7 @@ export function initHero(canvas: HTMLCanvasElement, reduced: boolean) {
     const h = hullTarget(boat.x);
     // 顺坡下滑时往前冲一点，爬坡时减速
     boat.surge += (clamp(h.slope * 22, -7, 7) - boat.surge) * 0.025;
-    boat.x = boatBaseX() + boat.surge;
+    boat.x = sailingX(t) + boat.surge;
     const ta = clamp(Math.atan(h.slope) * 0.8, -0.21, 0.21);
     boat.vy += (h.y - boat.y) * 0.03 - boat.vy * 0.16;
     boat.y += boat.vy;
@@ -296,7 +246,7 @@ export function initHero(canvas: HTMLCanvasElement, reduced: boolean) {
     bands.forEach((c, i) => { ctx.fillStyle = c; ctx.fillRect(0, Math.floor((H * i) / bands.length), LW, Math.ceil(H / bands.length) + 1); });
     for (const [fx, fy, ph, sz] of stars) {
       if (!reduced && Math.sin(t / 28 + ph) < -0.55) continue;
-      const x = Math.floor(fx * LW), y = Math.floor(fy * H + sy * 0.04);
+      const x = Math.floor(((fx * LW - voyage.offset * 0.02) % LW + LW) % LW), y = Math.floor(fy * H + sy * 0.04);
       ctx.fillStyle = sz > 1 ? C.warm : '#c9c6ff'; ctx.fillRect(x, y, 1, 1);
       if (sz > 1) { ctx.fillRect(x - 1, y, 3, 1); ctx.fillRect(x, y - 1, 1, 3); }
     }
@@ -310,13 +260,13 @@ export function initHero(canvas: HTMLCanvasElement, reduced: boolean) {
       if (a && !b) { ctx.fillStyle = xx < -5 || yy > 5 ? '#e8cf86' : C.warm; ctx.fillRect(mx + 8 + xx, my + 8 + yy, 1, 1); }
     }
     for (const c of clouds) {
-      const x = Math.floor(((c.x + (reduced ? 0 : t) * c.v) % (LW + 100)) - 50), y = Math.floor(c.y * H + sy * (c.layer ? 0.1 : 0.05));
+      const x = Math.floor(((c.x + (reduced ? 0 : t) * c.v - voyage.offset * (c.layer ? 0.06 : 0.1)) % (LW + 100) + (LW + 100)) % (LW + 100) - 50), y = Math.floor(c.y * H + sy * (c.layer ? 0.1 : 0.05));
       ctx.fillStyle = c.layer ? 'rgba(120,80,160,.42)' : 'rgba(70,50,130,.5)';
       ctx.fillRect(x, y, c.w, 4); ctx.fillRect(x + 4, y - 3, c.w - 10, 3); ctx.fillRect(x + 9, y - 5, Math.floor(c.w / 3), 2);
       ctx.fillStyle = 'rgba(255,170,150,.22)'; ctx.fillRect(x + 2, y + 4, c.w - 6, 1);
     }
     for (const s of gulls) {
-      const x = Math.floor(((s.x + (reduced ? 0 : t) * s.v) % (LW + 40)) - 20), y = Math.floor(s.y * H + Math.sin(t / 30 + s.ph) * 2);
+      const x = Math.floor(((s.x + (reduced ? 0 : t) * s.v - voyage.offset * 0.2) % (LW + 40) + (LW + 40)) % (LW + 40) - 20), y = Math.floor(s.y * H + Math.sin(t / 30 + s.ph) * 2);
       const up = !reduced && Math.floor(t / 10 + s.ph) % 2 === 0;
       ctx.fillStyle = '#e8e4ff';
       if (up) { ctx.fillRect(x, y, 1, 1); ctx.fillRect(x + 1, y + 1, 1, 1); ctx.fillRect(x + 2, y + 2, 1, 1); ctx.fillRect(x + 3, y + 1, 1, 1); ctx.fillRect(x + 4, y, 1, 1); }
@@ -325,21 +275,13 @@ export function initHero(canvas: HTMLCanvasElement, reduced: boolean) {
     return mx + 8;
   };
 
+  const view = (): VoyageView => ({
+    LW, LH, mobile: mobile(), horizon: horizon(), base: base(), boatX: boat.x, surf,
+  });
+
   const drawFarSea = (t: number, sy: number) => {
     const H = horizon();
-    const ix = mobile() ? 8 : Math.floor(LW * 0.93) - 30;
-    if (!mobile() || LW > 120) {
-      ctx.fillStyle = '#140f3a'; ctx.fillRect(ix, H - 4, 34, 4); ctx.fillRect(ix + 6, H - 7, 18, 3); ctx.fillRect(ix + 10, H - 9, 8, 2);
-      ctx.fillStyle = C.cream; ctx.fillRect(ix + 13, H - 21, 3, 12); ctx.fillStyle = C.coral; ctx.fillRect(ix + 13, H - 17, 3, 2); ctx.fillRect(ix + 13, H - 12, 3, 2);
-      ctx.fillStyle = C.ink; ctx.fillRect(ix + 12, H - 24, 5, 3);
-      const on = reduced || Math.floor(t / 20) % 4;
-      ctx.fillStyle = on ? C.gold : '#6b5b1f'; ctx.fillRect(ix + 13, H - 23, 3, 2);
-      if (!reduced) {
-        const side = Math.floor(t / 40) % 2 ? 1 : -1;
-        ctx.fillStyle = 'rgba(255,233,168,.12)';
-        for (let i = 1; i < 40; i++) ctx.fillRect(side > 0 ? ix + 16 + i : ix + 13 - i, H - 23 + Math.floor(-i / 10), 1, 2 + Math.floor(i / 8));
-      }
-    }
+    voyage.drawScenery(ctx, view(), t);
     const sea = [SEA.d3, SEA.d2, SEA.d2, SEA.d1, SEA.d1, SEA.deep];
     const span = LH - H;
     sea.forEach((c, i) => { ctx.fillStyle = c; ctx.fillRect(0, H + Math.floor((span * i) / sea.length), LW, Math.ceil(span / sea.length) + 1); });
@@ -349,7 +291,7 @@ export function initHero(canvas: HTMLCanvasElement, reduced: boolean) {
     for (let row = 0; row < 6; row++) {
       const y = H + 3 + Math.floor(row * row * 0.5 + row * 1.4);
       const len = 3 + Math.floor(row * 0.7), gap = 14 + row * 3, sp = 0.12 + row * 0.05;
-      const off = Math.floor((reduced ? 0 : t) * sp + row * 37 + sy * 0.02) % gap;
+      const off = Math.floor((reduced ? 0 : t) * sp + row * 37 + sy * 0.02 + voyage.offset * 0.16) % gap;
       ctx.fillStyle = 'rgba(169,187,255,.35)';
       for (let x = -off; x < LW; x += gap) if (hash(Math.floor((x + off) / gap), row) > 0.35) ctx.fillRect(x, y, len, 1);
     }
@@ -365,7 +307,7 @@ export function initHero(canvas: HTMLCanvasElement, reduced: boolean) {
       const amp0 = m.w[0].A;
       for (let x = 0; x < LW; x++) {
         m.w[0].A = amp0 * e;
-        gerstner(m.w, x, t, tmp);
+        gerstner(m.w, x + voyage.offset * (0.28 + m.f * 0.55), t, tmp);
         const s = Math.round(b - tmp.h);
         ctx.fillStyle = m.fill; ctx.fillRect(x, s, 1, LH - s);
         ctx.fillStyle = m.rim; ctx.fillRect(x, s, 1, 1);
@@ -442,7 +384,7 @@ export function initHero(canvas: HTMLCanvasElement, reduced: boolean) {
   const drawForeground = (t: number) => {
     const y0 = LH - (mobile() ? 7 : 10);
     for (let x = 0; x < LW; x++) {
-      gerstner(fore, x, t, tmp);
+      gerstner(fore, x + voyage.offset * 1.15, t, tmp);
       const s = Math.round(y0 - tmp.h);
       const c = Math.cos(tmp.th);
       ctx.fillStyle = SEA.d1; ctx.fillRect(x, s, 1, LH - s);
@@ -507,7 +449,7 @@ export function initHero(canvas: HTMLCanvasElement, reduced: boolean) {
     const bow = toWorld(91, WL - 1);
     const sub = bow.y - surf(bow.x);
     const dSub = sub - boat.bowSub; boat.bowSub = sub;
-    const power = clamp(dSub * 2.2 + 0.35 + Math.max(0, sub) * 0.08, 0, 4);
+    const power = clamp(dSub * 2.2 + 0.35 + Math.max(0, sub) * 0.08 + voyage.speed * 0.9, 0, 5);
     const n = Math.floor(power) + (Math.random() < power % 1 ? 1 : 0);
     for (let i = 0; i < n; i++) {
       const up = 0.6 + Math.random() * (0.8 + power * 0.5);
@@ -516,8 +458,9 @@ export function initHero(canvas: HTMLCanvasElement, reduced: boolean) {
     // 船舷两侧的水花（船落下拍水时）
     if (boat.vy > 0.25) for (let i = 0; i < 2; i++) { const p = toWorld(10 + Math.random() * 76, WL); spray.push({ x: p.x, y: surf(p.x) - 1, vx: (Math.random() - 0.5) * 0.8, vy: -0.4 - Math.random() * boat.vy * 1.6, life: 16, max: 16, c: SEA.foam }); }
     // 尾迹：船尾留下泡沫，漂向后方
-    if (t % 2 === 0) { const st = toWorld(6, WL); wake.push({ x: st.x - Math.random() * 2, life: 110, max: 110, j: Math.random() }); }
-    for (let i = wake.length - 1; i >= 0; i--) { const w = wake[i]; w.x -= 0.45 + w.j * 0.25; w.life--; if (w.life <= 0 || w.x < -4) wake.splice(i, 1); }
+    if (t % 2 === 0) { const st = toWorld(6, WL); wake.push({ x: st.x - Math.random() * 2, life: 130, max: 130, j: Math.random() }); }
+    const drift = 0.45 + voyage.speed * 0.85;
+    for (let i = wake.length - 1; i >= 0; i--) { const w = wake[i]; w.x -= drift + w.j * 0.25; w.life--; if (w.life <= 0 || w.x < -4) wake.splice(i, 1); }
     for (let i = spray.length - 1; i >= 0; i--) {
       const p = spray[i]; p.x += p.vx; p.y += p.vy; p.vy += 0.085; p.vx *= 0.985; p.life--;
       if (p.life <= 0 || (p.vy > 0 && p.y > surf(p.x) + 1)) spray.splice(i, 1);
@@ -530,9 +473,11 @@ export function initHero(canvas: HTMLCanvasElement, reduced: boolean) {
     const moonX = drawSky(t, sy);
     drawFarSea(t, sy);
     drawMids(t);
+    voyage.drawFar(ctx, view(), t);
     drawMoonPath(t, moonX);
     fillMain(t);
     for (let x = 0; x < LW; x++) drawMainCol(x, t, -999, moonX, false);
+    voyage.drawNear(ctx, view(), t);
     // 尾迹泡沫（贴着水面）
     for (const w of wake) {
       const k = w.life / w.max, spread = Math.floor((1 - k) * 4);
@@ -574,7 +519,7 @@ export function initHero(canvas: HTMLCanvasElement, reduced: boolean) {
     if (!visible || document.hidden) { last = now; return; }
     acc += Math.min(100, now - (last || now)); last = now;
     let stepped = false;
-    while (acc >= 16.67) { t++; acc -= 16.67; fillMain(t); stepBoat(t); stepFx(t); stepped = true; }
+    while (acc >= 16.67) { t++; acc -= 16.67; voyage.step(); fillMain(t); stepBoat(t); stepFx(t); stepped = true; }
     if (stepped) draw(t);
   };
   requestAnimationFrame(loop);
