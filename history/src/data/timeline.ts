@@ -182,7 +182,7 @@ export const closing = {
     '招聘轮次与提醒、岗位订阅、简历导入：待开发',
   ],
   team: [
-    // 七人团队。已提供六位姓名；第七位与各自身份均待补充，不编造。
+    // 七人团队姓名已齐。各自身份仍待补充，不编造。
     // crew 对应海面小船上从舵手到船头的男性像素形象，头像与船上人物为同一套绘制。
     { name: '刘胤政', role: '待补充', crew: 0 },
     { name: '刘思恺', role: '待补充', crew: 1 },
@@ -190,7 +190,7 @@ export const closing = {
     { name: '王子贤', role: '待补充', crew: 3 },
     { name: '李铁', role: '待补充', crew: 4 },
     { name: '孙玮亨', role: '待补充', crew: 5 },
-    { name: '待补充', role: '待补充', crew: 6 },
+    { name: '董瀚宇', role: '待补充', crew: 6 },
   ],
   contact: [
     { label: 'GitHub', value: 'Huber853/Offerbiu' },
