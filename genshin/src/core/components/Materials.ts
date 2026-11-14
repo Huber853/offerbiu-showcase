@@ -111,9 +111,10 @@ export class ToonMaterials {
     public getToonMaterial_Road(originMaterial: MeshPhysicalMaterial, renderer: WebGLRenderer) {
         originMaterial.color.multiply(new Color("#fffcfe").add(new Color().setRGB(0.015, 0, 0)))
         originMaterial.normalMap.minFilter = LinearMipmapLinearFilter;
-        originMaterial.normalMap.anisotropy = renderer.capabilities.getMaxAnisotropy() / 2;
-        originMaterial.roughnessMap.anisotropy = renderer.capabilities.getMaxAnisotropy() / 2;
-        originMaterial.map.anisotropy = renderer.capabilities.getMaxAnisotropy() / 2;
+        const ani = Math.min(4, renderer.capabilities.getMaxAnisotropy());
+        originMaterial.normalMap.anisotropy = ani;
+        originMaterial.roughnessMap.anisotropy = ani;
+        originMaterial.map.anisotropy = ani;
         originMaterial.roughness = 5
         originMaterial.metalness = 0.;
         originMaterial.onBeforeCompile = function (shader) {

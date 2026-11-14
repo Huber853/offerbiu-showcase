@@ -53,6 +53,18 @@ var evt = "resize";//"onorientationchange" in window ? "orientationchange" : "re
 window.addEventListener(evt, resizeWindow, false);
 
 
+
+/** 限制渲染分辨率，并同步 viewer.dpr，避免后期特效按未限制的 DPR 算错大小。 */
+function capPixelRatio(viewer: Viewer, cap = 1.5) {
+    const apply = () => {
+        const dpr = Math.min(cap, window.devicePixelRatio || 1);
+        Object.defineProperty(viewer, "dpr", { configurable: true, get: () => dpr });
+        viewer.renderer.setPixelRatio(dpr);
+    };
+    apply();
+    addEventListener("resize", apply);
+}
+
 export class Game {
     public viewer!: Viewer;
     public SM: StateMachine = new StateMachine(this);
@@ -64,6 +76,9 @@ export class Game {
             user: new User(),
             linear: false, toneMapping: NoToneMapping, outputEncoding: LinearEncoding
         });
+        // 笔记本常见 200% 缩放下 devicePixelRatio=2，画布会到 2560×1600，
+        // 再叠加 Bloom/FXAA/阴影会把走廊拖得很卡。限制到 1.5，观感几乎不变。
+        capPixelRatio(this.viewer);
         this.SM.registState(StatePreload);
         this.SM.registState(StateGame);
         this.SM.setState("StatePreload");
