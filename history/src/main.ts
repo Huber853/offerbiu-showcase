@@ -82,6 +82,11 @@ initGame({
 });
 initCorridor(reduced);
 drawMascot(document.getElementById('mascot') as HTMLCanvasElement);
+// 模块延迟执行，浏览器第一次按 hash 滚动时 #corridor 还不存在。进场后再滚一次。
+if (location.hash) {
+  const id = decodeURIComponent(location.hash.slice(1));
+  requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: 'start' }));
+}
 
 // 导航：滚动进度 + 当前区块
 const nav = document.getElementById('nav')!, mark = document.getElementById('nav-mark')!;

@@ -102,32 +102,35 @@ a { color: inherit; }
 .stage { position: absolute; inset: 0; perspective: 1000px; perspective-origin: 50% 46%; overflow: hidden; }
 .camera, .world { position: absolute; left: 50%; top: 50%; transform-style: preserve-3d; will-change: transform; }
 .world > * { position: absolute; transform-style: preserve-3d; backface-visibility: hidden; }
-.floor { width: 1200px; height: 40000px; left: -600px; top: calc(300px - 20000px); transform: rotateX(90deg); background-color: #16122f;
+/* 地面/墙不再铺 40000px 长条（2x 屏上会超 GPU 纹理上限，既卡又可能整段空白）。长度由 --hall 控制，随镜头平移。 */
+.hall { position: absolute; left: 0; top: 0; transform-style: preserve-3d; will-change: transform; }
+.floor, .ceiling, .wall, .gate, .end-wall { backface-visibility: visible; }
+.floor { width: 1200px; height: var(--hall, 5400px); left: -600px; top: calc(300px - var(--hall, 5400px) / 2); transform: rotateX(90deg); background-color: #16122f;
   background-image:
     repeating-linear-gradient(0deg, transparent 0 110px, var(--gold) 110px 220px),
     linear-gradient(90deg, #365cf5 0 6px, transparent 6px calc(100% - 6px), #365cf5 calc(100% - 6px)),
     repeating-linear-gradient(0deg, #15122e 0 4px, #18143a 4px 8px);
   background-size: 8px 100%, 100% 100%, 100% 100%; background-position: center 0, 0 0, 0 0; background-repeat: repeat-y, no-repeat, repeat; }
-.ceiling { width: 1200px; height: 40000px; left: -600px; top: calc(-360px - 20000px); transform: rotateX(90deg); background: #08061a;
+.ceiling { width: 1200px; height: var(--hall, 5400px); left: -600px; top: calc(-360px - var(--hall, 5400px) / 2); transform: rotateX(90deg); background: #08061a;
   background-image: repeating-linear-gradient(0deg, transparent 0 440px, rgba(111,140,255,.5) 440px 452px); }
-.wall { width: 40000px; height: 660px; top: -360px; background-color: #1b1642;
+.wall { width: var(--hall, 5400px); height: 660px; top: -360px; background-color: #1b1642;
   background-image: linear-gradient(0deg, rgba(0,0,0,.35) 2px, transparent 2px), linear-gradient(90deg, rgba(0,0,0,.35) 2px, transparent 2px), linear-gradient(90deg, rgba(0,0,0,.35) 2px, transparent 2px);
   background-size: 100% 22px, 48px 44px, 48px 44px; background-position: 0 0, 0 0, 24px 22px; }
 .wall::after { content: ''; position: absolute; inset: auto 0 0 0; height: 40px; background: linear-gradient(0deg, rgba(54,92,245,.35), transparent); }
-.wall-l { left: calc(-600px - 20000px); transform: rotateY(90deg); }
-.wall-r { left: calc(600px - 20000px); transform: rotateY(90deg); }
+.wall-l { left: calc(-600px - var(--hall, 5400px) / 2); transform: rotateY(90deg); }
+.wall-r { left: calc(600px - var(--hall, 5400px) / 2); transform: rotateY(90deg); }
 .gate { width: 1200px; height: 660px; left: -600px; top: -360px; transform: translateZ(var(--gz)); box-shadow: inset 0 0 0 12px var(--brand), inset 0 0 0 16px var(--ink), inset 0 0 0 20px rgba(255,210,63,.6); }
 .gate::before { content: ''; position: absolute; left: 30%; right: 30%; top: 20px; height: 8px; background: var(--warm, #ffe9a8); box-shadow: 0 0 24px 6px rgba(255,233,168,.55); }
 .end-wall { width: 1200px; height: 660px; left: -600px; top: -360px; transform: translateZ(var(--ez)); background: radial-gradient(circle at 50% 55%, #2d2675 0, #120f2e 60%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; font-family: var(--px); color: var(--gold); }
 .end-wall b { font-size: 72px; line-height: 72px; font-weight: normal; }
 .end-wall span { font-size: 24px; color: var(--mute); }
-.poster { width: 380px; left: -190px; top: -260px; cursor: pointer; transition: opacity .25s; }
+.poster { width: 380px; left: -190px; top: -260px; cursor: pointer; }
 .poster.left { transform: translateX(-390px) translateZ(var(--z)) rotateY(48deg); }
 .poster.right { transform: translateX(390px) translateZ(var(--z)) rotateY(-48deg); }
 .poster-light { position: absolute; left: 10%; right: 10%; top: -60px; height: 60px; background: linear-gradient(180deg, transparent, rgba(255,233,168,.25)); clip-path: polygon(40% 0, 60% 0, 100% 100%, 0 100%); opacity: .3; transition: opacity .3s; }
 .poster.focus .poster-light { opacity: 1; }
 .poster-frame { position: relative; background: #120f2e; color: #fff; padding: 16px; box-shadow: 0 0 0 4px var(--ink), 0 0 0 8px var(--brand), 0 0 0 12px var(--ink), 16px 16px 0 10px rgba(0,0,0,.55); transition: box-shadow .3s; }
-.poster.focus .poster-frame { box-shadow: 0 0 0 4px var(--ink), 0 0 0 8px var(--gold), 0 0 0 12px var(--ink), 16px 16px 0 10px rgba(0,0,0,.55), 0 0 80px 16px rgba(255,210,63,.28); }
+.poster.focus .poster-frame { box-shadow: 0 0 0 4px var(--ink), 0 0 0 8px var(--gold), 0 0 0 12px var(--ink), 16px 16px 0 10px rgba(0,0,0,.55), 0 0 36px 8px rgba(255,210,63,.28); }
 .poster-head { display: flex; justify-content: space-between; align-items: center; font-size: 12px; line-height: 12px; color: var(--mute); padding-bottom: 10px; border-bottom: 2px dashed #3a3190; }
 .brand-mini { display: inline-flex; align-items: center; gap: 6px; color: var(--gold); }
 .brand-mini img { width: 14px; height: 14px; border-radius: 3px; }
@@ -144,7 +147,8 @@ a { color: inherit; }
 @keyframes shim { to { background-position: 24px 0; } }
 .art-badge { position: absolute; left: 8px; top: 8px; font-family: var(--px); font-size: 12px; line-height: 12px; padding: 4px 6px; background: rgba(14,11,38,.9); color: var(--gold); box-shadow: 0 0 0 2px var(--ink); }
 .art-path { position: absolute; left: 8px; bottom: 8px; right: 8px; font-size: 10px; color: #cfd6ff; background: rgba(14,11,38,.8); padding: 3px 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.poster-img.empty { display: flex; align-items: center; justify-content: center; text-align: center; font-family: var(--px); color: var(--mute); }
+.poster-img.empty { display: flex; align-items: center; justify-content: center; text-align: center; font-family: var(--px); color: var(--mute); background: repeating-linear-gradient(45deg, #1d1a4d 0 8px, #221e55 8px 16px); }
+.poster-img.empty strong { display: block; margin: 8px 8px 0; color: var(--gold); font-weight: normal; }
 .ph code { display: block; margin-top: 8px; font-size: 10px; }
 .poster h3 { font-family: var(--px); font-weight: normal; font-size: 24px; line-height: 30px; margin-bottom: 8px; }
 .poster p { font-size: 14px; line-height: 1.65; color: #cfcbef; }
@@ -233,7 +237,7 @@ footer small { font-size: 12px; opacity: .7; }
   .poster h3 { font-size: 12px; line-height: 18px; }
   .poster p { display: none; }
   .floor, .ceiling, .gate, .end-wall { width: 560px; left: -280px; }
-  .wall-l { left: calc(-280px - 20000px); } .wall-r { left: calc(280px - 20000px); }
+  .wall-l { left: calc(-280px - var(--hall, 5400px) / 2); } .wall-r { left: calc(280px - var(--hall, 5400px) / 2); }
   .c-info { left: 16px; right: 16px; bottom: 84px; }
   .c-info h3 { font-size: 24px; line-height: 30px; }
   .c-info p { font-size: 13px; }
