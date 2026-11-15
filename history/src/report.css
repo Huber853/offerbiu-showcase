@@ -15,7 +15,7 @@
 
 .report h2 {
   margin: 10px 0 16px;
-  font-family: 'Fusion Pixel', 'Zpix', sans-serif;
+  font-family: var(--px);
   font-size: clamp(28px, 4vw, 42px);
   letter-spacing: 0.04em;
   text-shadow: 4px 4px 0 #000;
@@ -46,7 +46,7 @@
 
 .rpt-card h3 {
   margin: 0 0 12px;
-  font-family: 'Fusion Pixel', 'Zpix', sans-serif;
+  font-family: var(--px);
   font-size: 20px;
   color: var(--gold);
   letter-spacing: 0.08em;
@@ -89,7 +89,7 @@
 }
 
 .rpt-facts b {
-  font-family: 'Fusion Pixel', 'Zpix', sans-serif;
+  font-family: var(--px);
   color: var(--gold);
   font-size: 18px;
   letter-spacing: 0.04em;
@@ -136,7 +136,7 @@
 .rpt-mods b {
   display: block;
   margin-bottom: 4px;
-  font-family: 'Fusion Pixel', 'Zpix', sans-serif;
+  font-family: var(--px);
   color: var(--gold);
   font-size: 14px;
 }
@@ -190,7 +190,7 @@
   display: block;
   margin-bottom: 2px;
   color: var(--cream);
-  font-family: 'Fusion Pixel', 'Zpix', sans-serif;
+  font-family: var(--px);
   font-size: 13px;
   letter-spacing: 0.06em;
 }
