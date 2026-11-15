@@ -5,6 +5,7 @@ import { paintTeamAvatars } from './crew';
 import { asset, underGate } from './asset';
 import { initGame, drawMascot } from './game';
 import { corridorHTML, initCorridor, loadPosterImages } from './corridor';
+import { reportHTML } from './report';
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -53,9 +54,12 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   ${corridorHTML()}
   <div class="edge" style="--from:#0a0820;--to:#0e0b26"></div>
 
+  ${reportHTML()}
+  <div class="edge" style="--from:#0a0820;--to:#0e0b26"></div>
+
   <section class="closing" id="closing">
     <div class="closing-inner">
-      <span class="chip reveal">${esc(ui.nav[3].label)}</span>
+      <span class="chip reveal">${esc(ui.nav.find((n) => n.id === 'closing')?.label ?? '现在')}</span>
       <h2 class="reveal">${esc(closing.title)}</h2>
       <div class="board">
         <div class="note reveal" style="--r:-1.5deg"><i class="pin"></i><h4>现在</h4><ul>${closing.now.map((n) => `<li>${esc(n)}</li>`).join('')}</ul></div>

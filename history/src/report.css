@@ -1,0 +1,242 @@
+.report {
+  position: relative;
+  z-index: 1;
+  padding: 72px 24px 100px;
+  background:
+    radial-gradient(1200px 420px at 50% -40px, rgba(54, 92, 245, 0.22), transparent 70%),
+    linear-gradient(180deg, #0e0b26 0%, #120f2c 55%, #0a0820 100%);
+  color: var(--cream);
+}
+
+.rpt-inner {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+}
+
+.report h2 {
+  margin: 10px 0 16px;
+  font-family: 'Fusion Pixel', 'Zpix', sans-serif;
+  font-size: clamp(28px, 4vw, 42px);
+  letter-spacing: 0.04em;
+  text-shadow: 4px 4px 0 #000;
+}
+
+.rpt-lead {
+  max-width: 46em;
+  margin: 0 0 28px;
+  color: rgba(255, 248, 230, 0.86);
+  line-height: 1.75;
+  font-size: 15px;
+}
+
+.rpt-lead a,
+.rpt-card a {
+  color: var(--gold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.rpt-card {
+  margin: 0 0 22px;
+  padding: 22px 22px 20px;
+  background: rgba(20, 17, 42, 0.72);
+  border: 4px solid #1c1840;
+  box-shadow: 8px 8px 0 #05040f, inset 0 0 0 2px rgba(255, 210, 63, 0.12);
+}
+
+.rpt-card h3 {
+  margin: 0 0 12px;
+  font-family: 'Fusion Pixel', 'Zpix', sans-serif;
+  font-size: 20px;
+  color: var(--gold);
+  letter-spacing: 0.08em;
+}
+
+.rpt-card p,
+.rpt-list,
+.rpt-steps,
+.rpt-path {
+  margin: 0 0 12px;
+  color: rgba(255, 248, 230, 0.88);
+  line-height: 1.75;
+  font-size: 14.5px;
+}
+
+.rpt-card p:last-child,
+.rpt-list:last-child,
+.rpt-steps:last-child,
+.rpt-path:last-child {
+  margin-bottom: 0;
+}
+
+.rpt-facts {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin: 16px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rpt-facts li {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 10px;
+  background: #0a0820;
+  border: 3px solid #2a2558;
+  text-align: center;
+}
+
+.rpt-facts b {
+  font-family: 'Fusion Pixel', 'Zpix', sans-serif;
+  color: var(--gold);
+  font-size: 18px;
+  letter-spacing: 0.04em;
+}
+
+.rpt-facts span {
+  font-size: 12px;
+  color: rgba(255, 248, 230, 0.7);
+  line-height: 1.4;
+}
+
+.rpt-list,
+.rpt-steps {
+  padding-left: 1.2em;
+}
+
+.rpt-list li,
+.rpt-steps li {
+  margin: 0 0 8px;
+}
+
+.rpt-list b {
+  color: #fff8e6;
+}
+
+.rpt-path {
+  padding: 12px 14px;
+  background: #0a0820;
+  border-left: 6px solid var(--brand);
+}
+
+.rpt-mods {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.rpt-mods div {
+  padding: 12px 14px;
+  background: #0a0820;
+  border: 3px solid #2a2558;
+}
+
+.rpt-mods b {
+  display: block;
+  margin-bottom: 4px;
+  font-family: 'Fusion Pixel', 'Zpix', sans-serif;
+  color: var(--gold);
+  font-size: 14px;
+}
+
+.rpt-mods span {
+  color: rgba(255, 248, 230, 0.78);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.rpt-uml,
+.rpt-wide {
+  margin: 12px 0 0;
+}
+
+.rpt-uml img,
+.rpt-wide img,
+.rpt-pair img,
+.rpt-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff8e6;
+  border: 3px solid #1c1840;
+  box-shadow: 6px 6px 0 #05040f;
+  image-rendering: auto;
+}
+
+.rpt-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.rpt-shot {
+  margin: 0;
+}
+
+.rpt-shot figcaption,
+.rpt-pair figcaption,
+.rpt-wide figcaption {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(255, 248, 230, 0.78);
+}
+
+.rpt-shot figcaption b,
+.rpt-pair figcaption b {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--cream);
+  font-family: 'Fusion Pixel', 'Zpix', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+}
+
+.rpt-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 14px 0;
+}
+
+.rpt-pair figure,
+.rpt-wide {
+  margin: 0;
+}
+
+@media (max-width: 820px) {
+  .rpt-facts { grid-template-columns: repeat(2, 1fr); }
+  .rpt-facts li:last-child { grid-column: 1 / -1; }
+  .rpt-mods,
+  .rpt-gallery,
+  .rpt-pair { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .report * { transition: none !important; }
+}
+
+.rpt-demo-head {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 16px;
+  align-items: start;
+  margin: 0 0 12px;
+}
+
+.rpt-avatar {
+  width: 88px;
+  height: 88px;
+  image-rendering: pixelated;
+  background: #fff8e6;
+  border: 3px solid #1c1840;
+  box-shadow: 4px 4px 0 #05040f;
+}
+
+@media (max-width: 820px) {
+  .rpt-demo-head { grid-template-columns: 72px 1fr; }
+  .rpt-avatar { width: 72px; height: 72px; }
+}
