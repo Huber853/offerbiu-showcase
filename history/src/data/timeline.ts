@@ -24,9 +24,8 @@ export const site = {
   heroFacts: [
     { label: '首次提交', value: '2026-09-20' },
     { label: 'Git 提交', value: '17 次' },
-    { label: '岗位快照', value: '16375 条' },
+    { label: '岗位快照', value: '24,193 条' },
     { label: '简历模板', value: '19 套' },
-    { label: '自动化测试', value: '116 项' },
   ],
   brandColor: '#365cf5', // 出自 favicon.svg / 人物素材说明
 };
@@ -46,7 +45,7 @@ export const ui = {
   scrollHint: '往下滚，登船出发',
   corridorLabel: '回廊',
   corridorLead: '往回走过',
-  corridorUnit: '个里程碑',
+  corridorUnit: '段历程',
   corridorHint: '滚动前进 · 点刻度跳转',
   placeholderArt: '插画占位 · 可换成截图',
   loading: '正在开门…',
@@ -83,12 +82,12 @@ export const milestones: Milestone[] = [
     desc: '私人岗位工作流与简历工作室更新（53 个文件，+3117/−1112 行）；同晚把项目交给专门的 offerbiu 助手。',
     tag: '功能',
     source: '版本记录；offerbiu 助手对话 2026-11-12 21:14',
-    image: '/images/milestones/2026-11-12.png',
+
   },
   {
     date: '2026-11-09',
     title: '下一阶段功能规划',
-    desc: '规划私人岗位、招聘轮次与提醒、岗位订阅、简历导入导出；基线测试 97/97 通过，私人岗位相关测试 116/116 通过。',
+    desc: '规划私人岗位、招聘轮次与提醒、岗位订阅、简历导入导出。',
     tag: '文档',
     source: 'docs/下一阶段功能开发计划.md、docs/下一阶段开发验收记录.md',
     image: '/images/milestones/2026-11-09.png',
@@ -99,7 +98,7 @@ export const milestones: Milestone[] = [
     desc: '参考 CSS Design Awards、Webby 获奖作品，把首页做成有版次和栏线的手册，工作台像索引页。',
     tag: '设计',
     source: 'docs/视觉设计调研与改版方案.md（日期取自文件修改时间，待确认）',
-    image: '/images/milestones/2026-11-08.png',
+
   },
   {
     date: '2026-11-07',
@@ -107,12 +106,12 @@ export const milestones: Milestone[] = [
     desc: '公开页面不再等同于岗位在招；不再宣称跨设备同步；服务器 AI 密钥限本机；新增需确认的账号删除。',
     tag: '安全',
     source: '版本记录（Cursor Agent 提交，Evan Lin 合并）',
-    image: '/images/milestones/2026-11-07.png',
+
   },
   {
     date: '2026-10-23',
     title: 'AI 求职工作流 + 中文简历模板',
-    desc: '加入经历确认、带依据的岗位评估、材料起草与投递留档，引入 MIT 开源简历模板，附 97 项自动化测试。',
+    desc: '加入经历确认、带依据的岗位评估、材料起草与投递留档，引入 MIT 开源简历模板。',
     tag: '功能',
     source: 'docs/AI求职工作流融合开发文档.md',
     image: '/images/milestones/2026-10-23.png',
@@ -123,7 +122,7 @@ export const milestones: Milestone[] = [
     desc: '保护 AI 配置，以及简历和投递流程。',
     tag: '安全',
     source: '版本记录',
-    image: '/images/milestones/2026-10-18.png',
+
   },
   {
     date: '2026-09-27',
@@ -131,7 +130,7 @@ export const milestones: Milestone[] = [
     desc: '两天内完成：SSRF 与登录防护、简历保存冲突、首页与工作台共用设计 token、游客草稿本地保存。',
     tag: '安全',
     source: '版本记录（2026-09-27 至 09-28）',
-    image: '/images/milestones/2026-09-27.png',
+
   },
   {
     date: '2026-09-25',
@@ -139,7 +138,7 @@ export const milestones: Milestone[] = [
     desc: '支持 DeepSeek 与自定义 OpenAI 兼容接口，新增岗位匹配分析；岗位库扩至 16378 条、214 家企业、32 个行业。',
     tag: '功能',
     source: '版本记录',
-    image: '/images/milestones/2026-09-25.png',
+
   },
   {
     date: '2026-09-20',
@@ -147,7 +146,7 @@ export const milestones: Milestone[] = [
     desc: '第一次提交到 Huber853/Offerbiu，同天重写 README；次日修复人物头顶气泡遮挡。',
     tag: '提交',
     source: '版本记录',
-    image: '/images/milestones/2026-09-20.png',
+
   },
   {
     date: '2026-09-16',
@@ -155,7 +154,7 @@ export const milestones: Milestone[] = [
     desc: '从无依赖静态主页扩展为 Node.js 24 + SQLite 全栈本地项目：账号、2027 校招岗位库、投递管理、简历中心、DeepSeek 润色。',
     tag: '文档',
     source: 'docs/实施方案.md（文内日期 2026-09-16）',
-    image: '/images/milestones/2026-09-16.png',
+
   },
   {
     date: '2026-09-08',
@@ -171,7 +170,7 @@ export const milestones: Milestone[] = [
     desc: '受 offerbiu.com 启发，开始动手做自己的秋招工作台；这是能找到的最早记录。',
     tag: '起点',
     source: 'C:\\Users\\Lenovo\\Documents\\Codex\\2026-09-05\\https-www-offerbiu-com-https-www（目录名）',
-    image: '/images/milestones/2026-09-05.png',
+
   },
 ];
 
@@ -185,7 +184,7 @@ export const closing = {
   team: [
     // 七人团队姓名已齐。身份未提供，只展示姓名与头像。
     // crew 对应海面小船上从舵手到船头的男性像素形象，头像与船上人物为同一套绘制。
-    { name: '刘胤政', crew: 0 },
+    { name: '哦鲸鲸', crew: 0 },
     { name: '刘思恺', crew: 1 },
     { name: '张俊杰', crew: 2 },
     { name: '王子贤', crew: 3 },
