@@ -36,8 +36,8 @@ export const ui = {
   nav: [
     { id: 'hero', label: '门口' },
     { id: 'play', label: '店内' },
-    { id: 'corridor', label: '回廊' },
     { id: 'report', label: '汇报' },
+    { id: 'corridor', label: '回廊' },
     { id: 'closing', label: '现在' },
   ],
   heroKicker: '开发历程',

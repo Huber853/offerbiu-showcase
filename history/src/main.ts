@@ -5,7 +5,7 @@ import { paintTeamAvatars } from './crew';
 import { asset, underGate } from './asset';
 import { initGame, drawMascot } from './game';
 import { corridorHTML, initCorridor, loadPosterImages } from './corridor';
-import { reportHTML } from './report';
+import { reportHTML, initReport } from './report';
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -51,10 +51,10 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   </section>
   <div class="edge" style="--from:#211b57;--to:#0a0820"></div>
 
-  ${corridorHTML()}
+  ${reportHTML()}
   <div class="edge" style="--from:#0a0820;--to:#0e0b26"></div>
 
-  ${reportHTML()}
+  ${corridorHTML()}
   <div class="edge" style="--from:#0a0820;--to:#0e0b26"></div>
 
   <section class="closing" id="closing">
@@ -84,6 +84,7 @@ initGame({
   reduced, soundLabels: [ui.soundOn, ui.soundOff],
 });
 initCorridor(reduced);
+initReport(reduced);
 drawMascot(document.getElementById('mascot') as HTMLCanvasElement);
 // 模块延迟执行，浏览器第一次按 hash 滚动时 #corridor 还不存在。进场后再滚一次。
 if (location.hash) {
